@@ -133,7 +133,10 @@ func (e *rhcosEditor) createImagePlaceholder(imagePath string, paddingLength uin
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer func() {
+		f.Sync()
+		f.Close()
+	}()
 
 	err = f.Truncate(int64(paddingLength))
 	if err != nil {
